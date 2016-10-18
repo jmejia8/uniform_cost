@@ -1,7 +1,7 @@
 #include "tools.c"
 #include "queue.c"
 
-void BFS(int nodes, int matrix[nodes][nodes], int goal, Queue** _front, Queue** _end){
+void uniform_cost(int nodes, int matrix[nodes][nodes], int goal, Queue** _front, Queue** _end){
 
 	Queue* front = *_front;
 	Queue* end = *_end;
@@ -19,18 +19,18 @@ void BFS(int nodes, int matrix[nodes][nodes], int goal, Queue** _front, Queue** 
 	// Agrega cada hijo a la cola
 	for (i = 0; i < nodes; ++i){
 		
-		if (matrix[root][i] != 1) continue;
+		if (matrix[root][i] == 0) continue;
+
+		enqueue(&front, &end, i, matrix[root][i]);
 		
 		// Elimina conecciones de nodos visitados
 		for (j = 0; j < nodes; ++j)
 			matrix[j][i] = 0;
 
-		matrix[root][i] = 0;
-		enqueue(&front, &end, i);
 	}
 
 	// Hacer esto hasta que la cola esté vacía
-	BFS(nodes, matrix, goal, &front, &end);
+	uniform_cost(nodes, matrix, goal, &front, &end);
 }
 
 
@@ -51,9 +51,9 @@ int main(int argc, char const *argv[])
 	Queue* front = NULL;
 	Queue* end = NULL;
 
-	enqueue(&front, &end, root);
+	enqueue(&front, &end, root, 0);
 	
-	BFS(nodes, matrix, goal, &front, &end);
+	uniform_cost(nodes, matrix, goal, &front, &end);
 
 	printf("\nObjetivo no encontrado :(\n");
 	printf("\n=============================================\n");
