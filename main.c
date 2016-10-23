@@ -11,7 +11,7 @@ void uniform_cost(int nodes, int matrix[nodes][nodes], int goal, Queue** _front)
 	// cola de prioridad
 	Queue* tmp = dequeue(&front);
 	
-	// La cola vacia siginfica que
+	// La cola vacía significa que
 	// el objetivo no puede ser alcanzado
 	// con los parámetros dados
 	if (tmp == NULL){
@@ -57,18 +57,18 @@ void uniform_cost(int nodes, int matrix[nodes][nodes], int goal, Queue** _front)
 		
 		if (matrix[root][i] == 0) continue;
 
-		// Crea el nuevo nodo para agragarlo a la cola
-		// Se agraga su identificador y el costo
+		// Crea el nuevo nodo para agregarlo a la cola
+		// Se agrega su identificador y el costo
 		Queue* new_node = create_node(i, cost + matrix[root][i]);
 
-		// Se agraga la ruta para llegar a este nodo
+		// Se agrega la ruta para llegar a este nodo
 		for (j = 0; j < tmp->path_len; ++j)
 			new_node->path[j] = tmp->path[j];
 
 		new_node->path[j] = i;
 		new_node->path_len = tmp->path_len + 1;
 
-		// Se agraga a la cola de prioridad
+		// Se agrega a la cola de prioridad
 		enqueue(&front, new_node);
 
 	}
@@ -103,14 +103,14 @@ int main(int argc, char const *argv[])
 	Queue* front = NULL;
 
 	// Creamos el nodo fuente y se agrega a la 
-	// cola vacia
+	// cola vacía
 	Queue* new_node = create_node(root, 0);
 	new_node->path[0] = 0;
 	new_node->path_len = 1;
 
 	enqueue(&front, new_node);
 
-	// Inicia búsqued de costo uniforme 
+	// Inicia búsqueda de costo uniforme 
 	uniform_cost(nodes, matrix, goal, &front);
 
 
