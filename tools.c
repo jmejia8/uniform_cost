@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const char names[] = {'A', 'B', 'C', 'D', 'E',
+const char names[] = {'S', 'A', 'B', 'C', 'D', 'E',
 					'F', 'G', 'H', 'I', 'J',
 					'K', 'L', 'M', 'N', 'O',
 					'P', 'Q', 'R', 'S', 'T',
@@ -10,9 +10,12 @@ const char names[] = {'A', 'B', 'C', 'D', 'E',
 					'7', '8', '9', '0'
 				};
 
+int visited[100];
+int visited_count = 0;
+
 void greeting(){
 	printf("=============================================\n");
-	printf("\tBúsqueda por aplitud\n");
+	printf("\tBúsqueda de Costo Uniforme\n");
 	printf("=============================================\n");
 }
 
@@ -32,5 +35,13 @@ void printmatrix(int nodes, int matrix[nodes][nodes]){
 		printf("\n");
 	}
 
+	printf("\n");
+}
+
+void print_visited(){
+	int i;
+	printf("\nNodos expandidos:  ");
+	for (i = 0; i < visited_count; ++i)
+		printf("%c, ", names[visited[i]]);
 	printf("\n");
 }

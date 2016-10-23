@@ -3,6 +3,9 @@ typedef struct _node
 {
 	int index;
 	int cost;
+	int path[100];
+	int path_len;
+
 	struct _node* back;
 	struct _node* front;
 } Queue;
@@ -13,7 +16,7 @@ typedef struct _node
 // Enqueue 
 // Dequeue
 //
-int enqueue(Queue** front, Queue** end, int index, int cost){
+int enqueue(Queue** front, int index, int cost){
 	Queue* new_node = (Queue *) malloc(sizeof(Queue));
 
 	// if somethig is wrong return false
@@ -29,6 +32,14 @@ int enqueue(Queue** front, Queue** end, int index, int cost){
 	new_node->cost  = cost;
 	new_node->back  = NULL;
 	new_node->front  = NULL;
+
+	int i;
+
+	for (i = 0; i < visited_count; ++i)
+		new_node->path[i] = visited[i];
+
+	new_node->path[i] = index;
+	new_node->path_len = visited_count + 1;
 
 	Queue* actual = *front;
 
@@ -100,12 +111,11 @@ int enqueue(Queue** front, Queue** end, int index, int cost){
 	return 0;
 }
 
-int* dequeue(Queue** front, Queue** end){
+Queue* dequeue(Queue** front){
 
 
 	if (*front == NULL){
 		*front = NULL;
-		*end = NULL;
 		return NULL;
 	}
 
@@ -116,7 +126,6 @@ int* dequeue(Queue** front, Queue** end){
 	{
 	
 		*front = NULL;
-		*end = NULL;
 	
 	}else{
 		*front = aux->back;
@@ -125,13 +134,13 @@ int* dequeue(Queue** front, Queue** end){
 
 	
 
-	int* tmp = (int*) malloc(sizeof(int)*2);
-	tmp[0] = aux->index;
-	tmp[1] = aux->cost;
+	// int* tmp = (int*) malloc(sizeof(int)*2);
+	// tmp[0] = aux->index;
+	// tmp[1] = aux->cost;
 
-	free(aux);
+	// free(aux);
 
-	return tmp;	
+	return aux;	
 }
 
 void read_data(int nodes, int matrix[nodes][nodes], int* root, int* goal){
@@ -156,4 +165,21 @@ void is_goal(int root, int goal){
 	}
 
 
+}
+
+void print_queue(Queue **front){
+	Queue* actual = *front;
+	int i;
+
+	printf("Nodos en la cola\n");
+	while(actual != NULL){
+		printf("\t");
+		for (i = 0; i < actual->path_len; ++i){
+			printf("%c -> ", names[actual->path[i]]);
+		}
+
+		printf("\t (%d)\n", actual->cost);
+
+		actual = actual->back;
+	}
 }
