@@ -17,25 +17,30 @@ typedef struct _node
 // Dequeue
 //
 int enqueue(Queue** front, Queue* new_node){
+	// Función para agragar a la cola
+	// de prioridad un nodo dado
+	// La prioridad es el costo, seguido del
+	// orden alfabético del identificador
+	// de cada nodo
 
 	int i,
 		cost = new_node->cost,
 		index = new_node->index;
 
-	// for (i = 0; i < visited_count; ++i)
-	// 	new_node->path[i] = visited[i];
-
-	// new_node->path[i] = index;
-	// new_node->path_len = visited_count + 1;
 
 	Queue* actual = *front;
 
+	// Si la cola está vacia, se agraga
+	// el nuevo nodo al principio de la cola
 	if (actual == NULL) {
 		*front = new_node;
 		return 1;
 	}
 
 	do{
+		// Si el costo del nuevo nodo es menor que 
+		// que cierto nodo en la cola, se agrega 
+		// el nuevo nodo al principio
 		if (cost < actual->cost){
 			new_node->back = actual;
 			new_node->front = actual->front;
@@ -51,6 +56,8 @@ int enqueue(Queue** front, Queue* new_node){
 			return 1;
 		}
 
+		// Si el costo es el mismo y alfabeticamente menor
+		// entonces se agraga antes del nodo en cuestión
 		if (cost == actual->cost && index <= actual->index){
 			new_node->back = actual;
 			new_node->front = actual->front;
@@ -66,7 +73,8 @@ int enqueue(Queue** front, Queue* new_node){
 			return 1;
 		}
 
-
+		// Si se recorrió toda la cola 
+		// se agra el nuevo nodo al final
 		if (actual->back == NULL) {
 
 			new_node->front = actual;
@@ -99,6 +107,8 @@ int enqueue(Queue** front, Queue* new_node){
 }
 
 Queue* dequeue(Queue** front){
+	// Extrae el nodo de menor
+	// cosoto de la cola de prioridad
 
 
 	if (*front == NULL){
@@ -119,18 +129,12 @@ Queue* dequeue(Queue** front){
 		aux->back->front = NULL;
 	}
 
-	
-
-	// int* tmp = (int*) malloc(sizeof(int)*2);
-	// tmp[0] = aux->index;
-	// tmp[1] = aux->cost;
-
-	// free(aux);
-
 	return aux;	
 }
 
 void read_data(int nodes, int matrix[nodes][nodes], int* root, int* goal){
+	// Inicializa los valores de entrada.
+
 	int i, j;
 
 	for (i = 0; i < nodes; ++i)
@@ -151,6 +155,8 @@ int is_goal(int root, int goal){
 }
 
 void print_queue(Queue **front){
+	// Emprime el recorrido de cada 
+	// nodo en la cola de prioridad
 	Queue* actual = *front;
 	int i;
 
@@ -168,6 +174,8 @@ void print_queue(Queue **front){
 }
 
 Queue* create_node(int index, int cost){
+	// Crea un nuevo nodo para ser agragado
+	// a la cola.
 	Queue* new_node = (Queue *) malloc(sizeof(Queue));
 
 	// if somethig is wrong return false
@@ -176,8 +184,6 @@ Queue* create_node(int index, int cost){
 		printf("Error: malloc in enqueue\n");
 		exit(0);
 	}
-
-	// printf("\n>>>> %i --- %i\n", index, cost);
 
 	new_node->index  = index;
 	new_node->cost  = cost;
