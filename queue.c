@@ -4,6 +4,7 @@ typedef struct _node
 	int index;
 	int cost;
 	struct _node* back;
+	struct _node* front;
 } Queue;
 
 
@@ -22,43 +23,90 @@ int enqueue(Queue** front, Queue** end, int index, int cost){
 		exit(0);
 	}
 
+	// printf("\n>>>> %i --- %i\n", index, cost);
+
 	new_node->index  = index;
 	new_node->cost  = cost;
 	new_node->back  = NULL;
+	new_node->front  = NULL;
 
-	Queue* aux1 = *front;
+	Queue* actual = *front;
 
-	if (aux1 == NULL || cost <= aux1->cost) {
-		new_node->back = aux1;
+	if (actual == NULL) {
 		*front = new_node;
 		return 1;
 	}
 
+	do{
+		if (cost < actual->cost){
+			new_node->back = actual;
+			new_node->front = actual->front;
 
-	Queue* aux2 = aux1->back;
-
-	while (aux1 != NULL){
-		if (aux2 == NULL || (cost >= aux1->cost && cost <= aux2->cost) ) {
-			new_node->back = aux2;
-			aux1->back = new_node;
+			if ( actual->front == NULL )
+				*front = new_node;
+			else
+				actual->front->back = new_node;
+			
+			actual->front = new_node;
+			
+			
 			return 1;
 		}
-		aux1 = aux1->back;
-		aux2 = aux1->back;
-	}
+
+		if (cost == actual->cost && index <= actual->index){
+			new_node->back = actual;
+			new_node->front = actual->front;
+
+			if ( actual->front == NULL )
+				*front = new_node;
+			else
+				actual->front->back = new_node;
+			
+			actual->front = new_node;
+			
+			
+			return 1;
+		}
+
+
+		if (actual->back == NULL) {
+
+			new_node->front = actual;
+			actual->back = new_node;
+
+
+			return 1;
+		}
+
+		if (cost < actual->back->cost){
+			new_node->front = actual;
+			new_node->back = actual->back;
+
+			actual->back->front = new_node;
+			actual->back = new_node;
+
+			return 1;
+		}
+		
+		actual = actual->back;
+
+
+	} while (actual != NULL);
+
+	
 
 	printf("somethig's wrong.\n");
 
 	return 0;
 }
 
-int dequeue(Queue** front, Queue** end){
+int* dequeue(Queue** front, Queue** end){
 
 
 	if (*front == NULL){
 		*front = NULL;
 		*end = NULL;
-		return -1;
+		return NULL;
 	}
 
 
@@ -72,11 +120,14 @@ int dequeue(Queue** front, Queue** end){
 	
 	}else{
 		*front = aux->back;
+		aux->back->front = NULL;
 	}
 
 	
 
-	int tmp = aux->index;
+	int* tmp = (int*) malloc(sizeof(int)*2);
+	tmp[0] = aux->index;
+	tmp[1] = aux->cost;
 
 	free(aux);
 
