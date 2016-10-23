@@ -45,3 +45,11 @@ void print_visited(){
 		printf("%c, ", names[visited[i]]);
 	printf("\n");
 }
+
+int is_visited(int index){
+	int i;
+	for (i = 0; i < visited_count; ++i)
+		if (visited[i] == index)
+			return 1;
+	return 0;
+}

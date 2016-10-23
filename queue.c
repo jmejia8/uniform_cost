@@ -16,30 +16,17 @@ typedef struct _node
 // Enqueue 
 // Dequeue
 //
-int enqueue(Queue** front, int index, int cost){
-	Queue* new_node = (Queue *) malloc(sizeof(Queue));
+int enqueue(Queue** front, Queue* new_node){
 
-	// if somethig is wrong return false
-	if (new_node == NULL)
-	{
-		printf("Error: malloc in enqueue\n");
-		exit(0);
-	}
+	int i,
+		cost = new_node->cost,
+		index = new_node->index;
 
-	// printf("\n>>>> %i --- %i\n", index, cost);
+	// for (i = 0; i < visited_count; ++i)
+	// 	new_node->path[i] = visited[i];
 
-	new_node->index  = index;
-	new_node->cost  = cost;
-	new_node->back  = NULL;
-	new_node->front  = NULL;
-
-	int i;
-
-	for (i = 0; i < visited_count; ++i)
-		new_node->path[i] = visited[i];
-
-	new_node->path[i] = index;
-	new_node->path_len = visited_count + 1;
+	// new_node->path[i] = index;
+	// new_node->path_len = visited_count + 1;
 
 	Queue* actual = *front;
 
@@ -157,21 +144,17 @@ void read_data(int nodes, int matrix[nodes][nodes], int* root, int* goal){
 		matrix[i][*root] = 0;
 }
 
-void is_goal(int root, int goal){
-	if (root == goal){
-		printf("\n\n¡¡Objetivo encontrado!!\n");
-		printf("\n=============================================\n");
-		exit(0);
-	}
-
-
+int is_goal(int root, int goal){
+	if (root == goal)
+		return 1;
+	return 0;
 }
 
 void print_queue(Queue **front){
 	Queue* actual = *front;
 	int i;
 
-	printf("Nodos en la cola\n");
+	printf("  Queue:\n");
 	while(actual != NULL){
 		printf("\t");
 		for (i = 0; i < actual->path_len; ++i){
@@ -182,4 +165,24 @@ void print_queue(Queue **front){
 
 		actual = actual->back;
 	}
+}
+
+Queue* create_node(int index, int cost){
+	Queue* new_node = (Queue *) malloc(sizeof(Queue));
+
+	// if somethig is wrong return false
+	if (new_node == NULL)
+	{
+		printf("Error: malloc in enqueue\n");
+		exit(0);
+	}
+
+	// printf("\n>>>> %i --- %i\n", index, cost);
+
+	new_node->index  = index;
+	new_node->cost  = cost;
+	new_node->back  = NULL;
+	new_node->front  = NULL;
+
+	return new_node;
 }
