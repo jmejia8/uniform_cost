@@ -60,6 +60,7 @@ void uniform_cost(int nodes, int matrix[nodes][nodes], int goal, Queue** _front)
 		// Crea el nuevo nodo para agregarlo a la cola
 		// Se agrega su identificador y el costo
 		Queue* new_node = create_node(i, cost + matrix[root][i]);
+		matrix[i][root] = 0;
 
 		// Se agrega la ruta para llegar a este nodo
 		for (j = 0; j < tmp->path_len; ++j)
@@ -105,7 +106,7 @@ int main(int argc, char const *argv[])
 	// Creamos el nodo fuente y se agrega a la 
 	// cola vacía
 	Queue* new_node = create_node(root, 0);
-	new_node->path[0] = 0;
+	new_node->path[0] = root;
 	new_node->path_len = 1;
 
 	enqueue(&front, new_node);
